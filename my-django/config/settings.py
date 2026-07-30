@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-29e&=ve3g2=!lz5g_lyv90z=k@z%r5rr8@-9-f=ce6+w0+k-0@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -121,3 +122,7 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / "portfolio" / "static",
 ]
+
+# Serve static files directly from source dirs since Vercel's serverless
+# build has no step to run `collectstatic`.
+WHITENOISE_USE_FINDERS = True

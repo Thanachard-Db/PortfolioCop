@@ -1,0 +1,1492 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — AI Developer &amp; Visual Storyteller</title>
+<meta name="description" content="Personal portfolio — AI-powered products, web platforms, and cinematic media production.">
+
+<!-- Fonts: Clash Display (headlines) + Inter (body) + JetBrains Mono (data/labels) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================
+   TOKENS
+========================================================== */
+:root{
+  --bg: #050505;
+  --surface: rgba(255,255,255,0.05);
+  --surface-strong: rgba(255,255,255,0.09);
+  --border: rgba(255,255,255,0.08);
+  --text: #ffffff;
+  --text-dim: rgba(255,255,255,0.62);
+  --text-faint: rgba(255,255,255,0.38);
+  --accent: #7C5CFF;
+  --accent-2: #00D4FF;
+  --gradient: linear-gradient(120deg, var(--accent), var(--accent-2));
+
+  --font-display: 'Clash Display', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --ease: cubic-bezier(.22,1,.36,1);
+  --container: 1240px;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+
+body{
+  margin:0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+img{ max-width:100%; display:block; }
+a{ color: inherit; text-decoration:none; }
+ul{ list-style:none; margin:0; padding:0; }
+h1,h2,h3{ font-family: var(--font-display); font-weight:600; margin:0; letter-spacing:-0.02em; }
+
+::selection{ background: var(--accent); color:#fff; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior:auto !important; }
+}
+
+/* ==========================================================
+   LOADER
+========================================================== */
+.loader{
+  position:fixed; inset:0; z-index:999;
+  background: var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap: 24px;
+}
+.loader-mark{
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  color: var(--text-faint);
+  overflow:hidden;
+}
+.loader-mark span{ display:inline-block; width: 40px; height:1px; background: var(--gradient); }
+.loader-count{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+.loader.done{ opacity:0; visibility:hidden; transition: opacity .8s var(--ease), visibility .8s; }
+
+/* ==========================================================
+   CUSTOM CURSOR
+========================================================== */
+.cursor-glow{
+  position:fixed; top:0; left:0; width:420px; height:420px;
+  border-radius:50%; pointer-events:none; z-index:2;
+  background: radial-gradient(circle, rgba(124,92,255,0.14) 0%, rgba(0,212,255,0.05) 45%, transparent 70%);
+  transform: translate(-50%,-50%);
+  will-change: transform; transition: opacity .3s;
+}
+.cursor-dot{
+  position:fixed; top:0; left:0; width:8px; height:8px; border-radius:50%;
+  background: var(--accent-2); pointer-events:none; z-index:999;
+  transform: translate(-50%,-50%); mix-blend-mode: difference;
+  transition: width .25s var(--ease), height .25s var(--ease), opacity .25s;
+}
+.cursor-dot.big{ width:48px; height:48px; background: rgba(255,255,255,0.9); }
+@media (hover:none){ .cursor-glow, .cursor-dot{ display:none; } }
+
+/* ==========================================================
+   AURORA BACKGROUND
+========================================================== */
+.aurora{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+.aurora-blob{
+  position:absolute; border-radius:50%; filter: blur(90px); opacity:0.35;
+  will-change: transform;
+}
+.blob-a{ width:520px; height:520px; top:-10%; left:-8%; background: var(--accent); animation: float-a 22s ease-in-out infinite; }
+.blob-b{ width:460px; height:460px; top:30%; right:-10%; background: var(--accent-2); opacity:0.22; animation: float-b 26s ease-in-out infinite; }
+.blob-c{ width:380px; height:380px; bottom:-12%; left:30%; background: #7C5CFF; opacity:0.18; animation: float-c 30s ease-in-out infinite; }
+
+@keyframes float-a{ 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(60px,80px) scale(1.15);} }
+@keyframes float-b{ 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(-70px,50px) scale(0.9);} }
+@keyframes float-c{ 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(40px,-60px) scale(1.1);} }
+
+.grain{
+  position:absolute; inset:0; opacity:0.025; mix-blend-mode:overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ==========================================================
+   NAV
+========================================================== */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 22px clamp(20px,5vw,64px);
+  backdrop-filter: blur(16px);
+  background: rgba(5,5,5,0.35);
+  border-bottom: 1px solid transparent;
+  transition: border-color .4s var(--ease), background .4s var(--ease);
+}
+.nav.scrolled{ border-color: var(--border); background: rgba(5,5,5,0.6); }
+.nav-logo{ font-family: var(--font-display); font-size:20px; font-weight:600; }
+.nav-logo span{ color: var(--accent-2); }
+.nav-links{ display:flex; gap: 36px; }
+.nav-links a{
+  font-size: 14px; color: var(--text-dim); position:relative; padding: 4px 0;
+  transition: color .3s var(--ease);
+}
+.nav-links a::after{
+  content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background: var(--gradient);
+  transition: width .35s var(--ease);
+}
+.nav-links a:hover{ color: var(--text); }
+.nav-links a:hover::after{ width:100%; }
+
+.nav-cta{
+  font-size:13px; padding: 11px 22px; border-radius: 100px; border:1px solid var(--border);
+  background: var(--surface); backdrop-filter: blur(8px);
+}
+.nav-burger{ display:none; background:none; border:none; width:32px; height:22px; position:relative; cursor:pointer; }
+.nav-burger span{ position:absolute; left:0; right:0; height:1.5px; background:#fff; transition: transform .3s, opacity .3s; }
+.nav-burger span:first-child{ top:0; } .nav-burger span:last-child{ bottom:0; }
+.nav-burger.open span:first-child{ transform: translateY(10px) rotate(45deg); }
+.nav-burger.open span:last-child{ transform: translateY(-10px) rotate(-45deg); }
+
+.mobile-menu{
+  position:fixed; inset:0; z-index:99; background: rgba(5,5,5,0.97); backdrop-filter: blur(20px);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px;
+  transform: translateY(-100%); transition: transform .5s var(--ease); opacity:0;
+}
+.mobile-menu.open{ transform: translateY(0); opacity:1; }
+.mobile-menu a{ font-family:var(--font-display); font-size: 28px; }
+
+/* ==========================================================
+   SHARED
+========================================================== */
+section{ position:relative; z-index:1; padding: 140px clamp(20px,5vw,64px); max-width: var(--container); margin:0 auto; }
+.eyebrow{
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform:uppercase;
+  color: var(--accent-2); margin: 0 0 18px;
+}
+h2{ font-size: clamp(30px, 4vw, 46px); max-width: 620px; margin-bottom: 20px; }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding: 16px 30px; border-radius: 100px; font-size: 14px; font-weight:500;
+  border:1px solid transparent; position:relative; overflow:hidden; isolation:isolate;
+}
+.btn span{ position:relative; z-index:1; }
+.btn-primary{ background: var(--gradient); color:#050505; font-weight:600; }
+.btn-ghost{ border-color: var(--border); background: var(--surface); backdrop-filter: blur(8px); }
+.btn-sm{ padding: 12px 22px; font-size:13px; }
+.btn-icon{ padding:12px; border-radius:50%; border:1px solid var(--border); background: var(--surface); }
+
+/* magnetic buttons handled via JS transform; keep smooth easing */
+.magnetic{ transition: transform .25s var(--ease); }
+
+/* scroll reveal base states (JS toggles .in-view) */
+.reveal-up, .reveal-fade, .reveal-line{ opacity:0; }
+.reveal-up{ transform: translateY(36px); }
+.reveal-up.in-view{ opacity:1; transform:none; transition: opacity .9s var(--ease), transform .9s var(--ease); }
+.reveal-fade.in-view{ opacity:1; transition: opacity 1s var(--ease); }
+.reveal-line.in-view{ opacity:1; transition: opacity .6s var(--ease); }
+
+.reveal-word{ display:inline-block; opacity:0; transform: translateY(110%) rotate(4deg); }
+.reveal-word.in-view{ opacity:1; transform:none; transition: opacity .7s var(--ease), transform .8s var(--ease); }
+
+/* ==========================================================
+   HERO
+========================================================== */
+.hero{
+  min-height: 100vh; display:flex; flex-direction:column; justify-content:center;
+  padding-top: 140px;
+}
+.hero-title{
+  font-size: clamp(38px, 7vw, 88px); line-height: 1.04; max-width: 1000px;
+}
+.hero-title .line{ display:block; overflow:hidden; padding-bottom: .12em; }
+.line-accent{ background: var(--gradient); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero-sub{ max-width: 480px; color: var(--text-dim); font-size:17px; margin-top: 26px; }
+.hero-actions{ display:flex; gap:16px; margin-top: 40px; flex-wrap:wrap; }
+
+.hero-scroll{
+  position:absolute; bottom: 48px; left: clamp(20px,5vw,64px);
+  display:flex; align-items:center; gap:14px; color:var(--text-faint); font-size:12px;
+  font-family: var(--font-mono); letter-spacing:0.08em;
+}
+.hero-scroll-track{ width:1px; height:46px; background: var(--border); position:relative; overflow:hidden; }
+.hero-scroll-dot{ position:absolute; top:-20%; left:0; width:1px; height:20%; background: var(--gradient); animation: scrolldot 2.2s ease-in-out infinite; }
+@keyframes scrolldot{ 0%{ top:-20%;} 100%{ top:100%;} }
+
+/* ==========================================================
+   3D SLIDER
+========================================================== */
+.slider-section{ padding-top: 60px; }
+.slider-heading{ margin-bottom: 56px; }
+.slider-heading h2{ max-width:none; }
+
+.slider{ position:relative; }
+.slider-stage{
+  position:relative; height: 560px; perspective: 1600px;
+}
+.slide{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transform: translateX(60%) rotateY(-35deg) scale(.82); filter: blur(6px);
+  transition: transform .9s var(--ease), opacity .7s var(--ease), filter .8s var(--ease);
+}
+.slide.active{
+  opacity:1; pointer-events:auto; z-index:3;
+  transform: translateX(0) rotateY(0deg) scale(1) rotateX(0deg); filter: blur(0);
+}
+.slide.prev{
+  opacity:0.5; z-index:2; transform: translateX(-55%) rotateY(28deg) scale(.82); filter: blur(6px);
+}
+.slide.next-hidden{
+  opacity:0.5; z-index:2; transform: translateX(55%) rotateY(-28deg) scale(.82); filter: blur(6px);
+}
+
+.slide-card{
+  width:100%; max-width: 980px; display:grid; grid-template-columns: 1.05fr 1fr; gap: 0;
+  border-radius: 26px; overflow:hidden; border:1px solid var(--border);
+  background: var(--surface); backdrop-filter: blur(20px);
+  box-shadow: 0 40px 90px -30px rgba(0,0,0,0.7);
+  transform-style: preserve-3d; will-change: transform;
+  position: relative;
+}
+.slide-card::before{
+  content:''; position:absolute; inset:0; padding:1px; border-radius:26px;
+  background: linear-gradient(135deg, rgba(124,92,255,0.5), rgba(0,212,255,0) 40%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity:0; transition: opacity .4s var(--ease); pointer-events:none;
+}
+.slide.active .slide-card:hover::before{ opacity:1; }
+
+.slide-media{ position:relative; overflow:hidden; min-height: 360px; }
+.slide-img{ position:absolute; inset:0; background-size:cover; background-position:center; transform: scale(1.08); transition: transform .8s var(--ease); }
+.slide.active .slide-card:hover .slide-img{ transform: scale(1.16); }
+
+.img-food-scanner{ background: radial-gradient(circle at 30% 30%, #2a1f5e, #0c0a1c 70%), linear-gradient(135deg,#7C5CFF,#00D4FF); background-blend-mode: screen; }
+.img-food-review{ background: radial-gradient(circle at 60% 40%, #0c2b33, #050505 70%), linear-gradient(135deg,#00D4FF,#7C5CFF); background-blend-mode: screen; }
+.img-media{ background: radial-gradient(circle at 40% 60%, #33172b, #050505 70%), linear-gradient(135deg,#FF5C8A,#7C5CFF); background-blend-mode: screen; }
+
+.slide-img-photo{ width:100%; height:100%; object-fit:cover; object-position:center; }
+.slide-glass{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(5,5,5,0) 40%, rgba(5,5,5,0.85) 100%); }
+.spotlight{
+  position:absolute; inset:0; opacity:0; pointer-events:none;
+  background: radial-gradient(circle 220px at var(--sx,50%) var(--sy,50%), rgba(255,255,255,0.16), transparent 70%);
+  transition: opacity .3s;
+}
+.slide-card:hover .spotlight{ opacity:1; }
+
+.slide-content{ padding: 44px 44px 44px 40px; display:flex; flex-direction:column; justify-content:center; gap:14px; }
+.slide-number{ font-family: var(--font-mono); color: var(--accent-2); font-size:13px; letter-spacing:0.1em; }
+.slide-category{ font-family: var(--font-mono); font-size:12px; color: var(--text-faint); text-transform:uppercase; letter-spacing:0.06em; margin:0; }
+.slide-title{ font-size: clamp(26px,2.6vw,36px); line-height:1.1; }
+.slide-desc{ color: var(--text-dim); font-size:14.5px; line-height:1.6; max-width:340px; }
+.slide-stack{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+.slide-stack span{
+  font-family: var(--font-mono); font-size:11px; padding:5px 12px; border-radius:100px;
+  border:1px solid var(--border); color: var(--text-dim);
+}
+.slide-buttons{ display:flex; gap:12px; margin-top:10px; }
+
+.slider-controls{ display:flex; align-items:center; justify-content:center; gap: 26px; margin-top: 44px; }
+.slider-arrow{
+  width:48px; height:48px; border-radius:50%; border:1px solid var(--border); background: var(--surface);
+  display:flex; align-items:center; justify-content:center; color:#fff; cursor:pointer;
+  transition: background .3s, border-color .3s, transform .3s;
+}
+.slider-arrow:hover{ background: var(--surface-strong); border-color: rgba(255,255,255,0.2); transform: scale(1.06); }
+.slider-index{ display:flex; align-items:center; gap:14px; font-family: var(--font-mono); font-size:13px; color: var(--text-faint); }
+#slideNow{ color:#fff; }
+.slider-progress{ width:140px; height:2px; background: var(--border); border-radius:2px; overflow:hidden; }
+.slider-progress-bar{ height:100%; width:33.33%; background: var(--gradient); transition: width .6s var(--ease); }
+
+@media (max-width: 900px){
+  .slider-stage{ height: auto; perspective:none; }
+  .slide{ position:relative; opacity:0; height:0; overflow:hidden; transform:none !important; filter:none; transition: opacity .5s; }
+  .slide.active{ opacity:1; height:auto; overflow:visible; }
+  .slide-card{ grid-template-columns:1fr; }
+  .slide-media{ min-height:220px; }
+  .slide-content{ padding: 30px 26px; }
+}
+
+/* ==========================================================
+   ABOUT
+========================================================== */
+.about-grid{ display:grid; grid-template-columns: 0.85fr 1.15fr; gap: 72px; align-items:center; }
+.about-visual{ position:relative; }
+.about-frame{ position:relative; border-radius:22px; overflow:hidden; aspect-ratio: 4/5; border:1px solid var(--border); }
+.about-img{
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 30% 20%, #241a4d, #050505 70%), linear-gradient(160deg,#7C5CFF,#00D4FF 120%);
+  background-blend-mode: screen;
+}
+.about-img{ width:100%; height:100%; object-fit:cover; object-position:center; }
+.about-frame-glow{ position:absolute; inset:-2px; box-shadow: inset 0 0 80px rgba(124,92,255,0.25); border-radius:22px; pointer-events:none; }
+.about-badge{
+  position:absolute; bottom:-24px; right:-24px; background: rgba(10,10,12,0.85); backdrop-filter: blur(14px);
+  border:1px solid var(--border); border-radius:18px; padding:20px 22px; display:flex; flex-direction:column; gap:2px;
+  box-shadow: 0 20px 50px -20px rgba(0,0,0,0.6);
+}
+.badge-num{ font-family: var(--font-display); font-size:30px; background:var(--gradient); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.badge-label{ font-size:11.5px; color: var(--text-dim); line-height:1.3; }
+
+.about-copy p{ color: var(--text-dim); font-size:16px; max-width: 560px; margin: 0 0 18px; }
+.about-facts{ display:flex; gap:40px; margin-top: 32px; flex-wrap:wrap; }
+.fact{ display:flex; flex-direction:column; gap:6px; }
+.fact span{ font-family: var(--font-mono); font-size:11px; color: var(--text-faint); text-transform:uppercase; letter-spacing:0.06em; }
+.fact strong{ font-size:14.5px; font-weight:500; }
+
+@media (max-width: 860px){ .about-grid{ grid-template-columns:1fr; gap:60px; } .about-badge{ position:static; margin-top:20px; align-self:flex-start; } }
+
+/* ==========================================================
+   SKILLS
+========================================================== */
+.skills-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px; }
+.skill-card{
+  background: var(--surface); border:1px solid var(--border); border-radius:20px; padding: 32px;
+  backdrop-filter: blur(14px); transition: transform .4s var(--ease), border-color .4s var(--ease);
+}
+.skill-card:hover{ transform: translateY(-6px); border-color: rgba(124,92,255,0.4); }
+.skill-icon{
+  width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(135deg, rgba(124,92,255,0.18), rgba(0,212,255,0.1)); color: var(--accent-2); margin-bottom:22px;
+}
+.skill-card h3{ font-size:19px; margin-bottom:16px; }
+.skill-card li{ color: var(--text-dim); font-size:14px; padding: 7px 0; border-top:1px solid var(--border); }
+.skill-card li:first-child{ border-top:none; }
+
+@media (max-width: 860px){ .skills-grid{ grid-template-columns:1fr; } }
+
+/* ==========================================================
+   PROJECTS
+========================================================== */
+.projects-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:24px; margin-top:48px; }
+.project-card{
+  border-radius:20px; overflow:hidden; border:1px solid var(--border); background: var(--surface);
+  backdrop-filter: blur(14px); transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+}
+.project-card:hover{ transform: translateY(-8px); box-shadow: 0 30px 60px -30px rgba(124,92,255,0.35); }
+.project-cover{ display:block; position:relative; aspect-ratio: 16/11; overflow:hidden; }
+.project-cover-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; transform: scale(1.06); transition: transform .6s var(--ease); }
+.project-card:hover .project-cover-img{ transform: scale(1.14); }
+.project-glass{ position:absolute; inset:0; background: linear-gradient(180deg, transparent 50%, rgba(5,5,5,0.6)); }
+.cover-1{ background: radial-gradient(circle at 30% 30%, #2a1f5e, #0c0a1c 70%), linear-gradient(135deg,#7C5CFF,#00D4FF); background-blend-mode:screen; }
+.cover-2{ background: radial-gradient(circle at 60% 40%, #0c2b33, #050505 70%), linear-gradient(135deg,#00D4FF,#7C5CFF); background-blend-mode:screen; }
+.cover-3{ background: radial-gradient(circle at 40% 60%, #33172b, #050505 70%), linear-gradient(135deg,#FF5C8A,#7C5CFF); background-blend-mode:screen; }
+.project-body{ padding: 26px; }
+.project-cat{ font-family: var(--font-mono); font-size:11px; color: var(--accent-2); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 10px; }
+.project-body h3{ font-size:19px; margin-bottom:10px; }
+.project-body p{ color: var(--text-dim); font-size:14px; margin:0 0 16px; }
+.project-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+.project-tags span{ font-family:var(--font-mono); font-size:11px; padding:5px 12px; border:1px solid var(--border); border-radius:100px; color:var(--text-dim); }
+@media (max-width: 860px){ .projects-grid{ grid-template-columns:1fr; } }
+.project-tags span{ font-family:var(--font-mono); font-size:11px; padding:5px 12px; border:1px solid var(--border); border-radius:100px; color:var(--text-dim); }
+
+.project-watch{
+  display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:500;
+  color:#fff; padding:10px 18px; border-radius:100px;
+  background: var(--gradient); transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.project-watch:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px -8px rgba(124,92,255,0.5); }
+.project-watch svg{ flex-shrink:0; }
+
+.project-play-overlay{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  opacity:0; transition: opacity .3s var(--ease); z-index:1;
+}
+.project-card:hover .project-play-overlay{ opacity:1; }
+.project-play-overlay span{
+  width:56px; height:56px; border-radius:50%; background: rgba(5,5,5,0.55); backdrop-filter: blur(6px);
+  display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,0.2);
+}
+/* ==========================================================
+   EXPERIENCE TIMELINE
+========================================================== */
+.timeline{ position:relative; margin-top: 56px; padding-left: 40px; }
+.timeline-line{ position:absolute; left:5px; top:6px; bottom:6px; width:1px; background: var(--border); }
+.timeline-line-fill{ position:absolute; top:0; left:0; width:100%; height:0%; background: var(--gradient); }
+.timeline-item{ position:relative; padding-bottom: 52px; }
+.timeline-item:last-child{ padding-bottom:0; }
+.timeline-dot{ position:absolute; left: -40px; top:4px; width:11px; height:11px; border-radius:50%; background: var(--bg); border:2px solid var(--accent-2); }
+.timeline-year{ font-family: var(--font-mono); font-size:12px; color: var(--text-faint); letter-spacing:0.06em; }
+.timeline-item h3{ font-size: 20px; margin: 8px 0 8px; }
+.timeline-item p{ color: var(--text-dim); font-size:14.5px; max-width:560px; margin:0; }
+
+/* ==========================================================
+   CONTACT
+========================================================== */
+/* ==========================================================
+   CONTACT (RE-DESIGNED)
+========================================================== */
+.contact {
+  padding-top: 120px;
+  padding-bottom: 60px;
+}
+
+.contact-inner {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ลำดับที่ 1: Eyebrow + Title + Subtitle ให้ไหลตามกันลื่นตา */
+.contact-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: 12px;
+}
+
+.contact-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.contact-sub {
+  color: var(--text-dim);
+  font-size: 15px;
+  margin-bottom: 36px;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* ลำดับที่ 2: เปลี่ยน Email ให้เป็นปุ่มกด Interactive (ไม่แย่งซีนความใหญ่ของ Title) */
+.contact-email-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  border-radius: 100px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  transition: all 0.3s var(--ease);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.contact-email-btn:hover {
+  border-color: var(--accent-2);
+  background: rgba(0, 212, 255, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px -8px rgba(0, 212, 255, 0.25);
+  color: #fff;
+}
+
+.contact-email-btn svg {
+  color: var(--accent-2);
+  flex-shrink: 0;
+}
+
+/* ลำดับที่ 3: Social Links รูปแบบ Badge เล็กโปร่งสบายตา */
+.contact-socials {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.contact-social-link {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-dim);
+  padding: 8px 18px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s var(--ease);
+}
+
+.contact-social-link:hover {
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--surface-strong);
+  transform: translateY(-2px);
+}
+
+/* FOOTER */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 110px;
+  padding-top: 26px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+
+.footer a {
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: var(--text);
+}
+
+@media (max-width: 640px){
+  section{ padding: 90px 20px; }
+  .nav-links{ display:none; }
+  .nav-cta{ display:none; }
+  .nav-burger{ display:block; }
+  .footer{ flex-direction:column; gap:14px; text-align:center; }
+}
+
+/* PROJECT GALLERY MODAL */
+.project-modal-overlay{
+  position:fixed; inset:0; z-index:200; background:rgba(5,5,5,0.85); backdrop-filter:blur(12px);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  opacity:0; pointer-events:none; transition:opacity .4s var(--ease);
+}
+.project-modal-overlay.open{ opacity:1; pointer-events:auto; }
+.project-modal{
+  width:100%; max-width:920px; max-height:88vh; background:var(--surface-strong);
+  border:1px solid var(--border); border-radius:24px; overflow:hidden; display:flex; flex-direction:column;
+  transform:scale(.94) translateY(20px); transition:transform .4s var(--ease);
+  box-shadow:0 60px 120px -40px rgba(0,0,0,0.8);
+}
+.project-modal-overlay.open .project-modal{ transform:scale(1) translateY(0); }
+.project-modal-head{ display:flex; align-items:center; justify-content:space-between; padding:22px 26px; border-bottom:1px solid var(--border); }
+.project-modal-head h3{ font-size:20px; }
+.project-modal-close{ width:38px; height:38px; border-radius:50%; border:1px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; color:#fff; cursor:pointer; }
+.project-modal-main{ position:relative; aspect-ratio:16/9; background:#000; overflow:hidden; }
+.project-modal-main img{ width:100%; height:100%; object-fit:contain; background:#0a0a0a; }
+.project-modal-nav{
+  position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; border-radius:50%;
+  background:rgba(5,5,5,0.6); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center;
+  justify-content:center; color:#fff; cursor:pointer; backdrop-filter:blur(6px);
+}
+.project-modal-nav.prev{ left:14px; } .project-modal-nav.next{ right:14px; }
+.project-modal-thumbs{ display:flex; gap:10px; padding:16px 20px; overflow-x:auto; }
+.project-modal-thumbs img{ width:84px; height:56px; object-fit:cover; border-radius:8px; cursor:pointer; opacity:.5; border:1px solid transparent; transition:opacity .25s, border-color .25s; flex-shrink:0; }
+.project-modal-thumbs img.active{ opacity:1; border-color:var(--accent-2); }
+.project-modal-desc{ padding: 4px 26px 18px; }
+.project-modal-desc p.desc-summary{ color: var(--text-dim); font-size:14px; line-height:1.6; margin:0 0 14px; }
+.project-modal-desc ol{ list-style:none; counter-reset: step; margin:0 0 16px; padding:0; display:flex; flex-direction:column; gap:10px; }
+.project-modal-desc ol li{ counter-increment: step; display:flex; gap:12px; font-size:13.5px; color: var(--text-dim); line-height:1.5; }
+.project-modal-desc ol li::before{
+  content: counter(step); flex-shrink:0; width:22px; height:22px; border-radius:50%;
+  background: var(--gradient); color:#050505; font-family:var(--font-mono); font-size:11px; font-weight:600;
+  display:flex; align-items:center; justify-content:center;
+}
+.project-modal-links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:4px; }
+.project-modal-link{
+  display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:500; color:#fff;
+  padding:10px 18px; border-radius:100px; border:1px solid var(--border); background: var(--surface);
+  transition: border-color .3s, transform .3s;
+}
+.project-modal-link:hover{ border-color: rgba(255,255,255,0.3); transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<!-- ============ LOADER ============ -->
+<div class="loader" id="loader">
+  <div class="loader-mark">
+    <span>—</span>
+  </div>
+  <div class="loader-count"><span id="loaderPct">0</span>%</div>
+</div>
+
+<!-- ============ CURSOR ============ -->
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- ============ AURORA BACKGROUND ============ -->
+<div class="aurora" aria-hidden="true">
+  <div class="aurora-blob blob-a"></div>
+  <div class="aurora-blob blob-b"></div>
+  <div class="aurora-blob blob-c"></div>
+  <div class="grain"></div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <a href="#top" class="nav-logo">C<span>O</span>P</a>
+  <nav class="nav-links">
+    <a href="#work" data-nav>Work</a>
+    <a href="#about" data-nav>About</a>
+    <a href="#skills" data-nav>Skills</a>
+    <a href="#projects" data-nav>Projects</a>
+    <a href="#experience" data-nav>Experience</a>
+  </nav>
+  <a href="#contact" class="nav-cta magnetic">
+    <span>Let's talk</span>
+  </a>
+  <button class="nav-burger" id="navBurger" aria-label="Open menu">
+    <span></span><span></span>
+  </button>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#work">Work</a>
+  <a href="#about">About</a>
+  <a href="#skills">Skills</a>
+  <a href="#projects">Projects</a>
+  <a href="#experience">Experience</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <p class="eyebrow reveal-line"><span>Frontend Developer — Thailand</span></p>
+    <h1 class="hero-title">
+      <span class="line"><span class="reveal-word">เว็บไซต์</span> <span class="reveal-word">รวบรวม</span> <span class="reveal-word">ผลงาน</span></span>
+      <span class="line"><span class="reveal-word">การพัฒนา</span> <span class="reveal-word">เว็บ</span> <span class="reveal-word">—</span></span>
+      <span class="line line-accent"><span class="reveal-word">กิจกรรม</span> <span class="reveal-word">ต่าง</span> <span class="reveal-word">ๆ</span></span>
+    </h1>
+    <p class="hero-sub reveal-fade">รวมผลงาน โปรเจกต์ กิจกรรม และประสบการณ์ต่าง ๆ ที่ได้สร้างสรรค์และลงมือทำตลอดช่วงเวลาการเรียนรู้ ทั้งงานด้านเทคโนโลยี การพัฒนาโปรเจกต์ ไปจนถึงการถ่ายทำและงานเบื้องหลัง</p>
+    <div class="hero-actions reveal-fade">
+      <a href="#work" class="btn btn-primary magnetic"><span>View selected work</span></a>
+      <a href="#contact" class="btn btn-ghost magnetic"><span>Email</span></a>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="hero-scroll-track"><div class="hero-scroll-dot"></div></div>
+    </div>
+  </section>
+
+  <!-- ============ 3D PERSPECTIVE SLIDER ============ -->
+  <section class="slider-section" id="work">
+    <div class="slider-heading">
+      <p class="eyebrow">Work</p>
+      <h2>เเนะนำผลงาน</h2>
+    </div>
+
+    <div class="slider" id="slider">
+      <div class="slider-stage" id="sliderStage">
+
+        <article class="slide" data-index="0">
+          <div class="slide-card">
+            <div class="slide-media">
+              <img src="{% static 'images/Scan1.png' %}" alt="Aroi Ho -รีวิวอาหาร Website" class="slide-img slide-img-photo">
+
+              <div class="slide-glass"></div>
+              <div class="spotlight"></div>
+            </div>
+            <div class="slide-content">
+              <span class="slide-number">01</span>
+              <p class="slide-category">Computer Vision · Deep Learning</p>
+              <h3 class="slide-title">Food Scanner<br>Web </h3>
+              <p class="slide-desc">	เพื่อออกเเบบเเละพัตนาระบบวิเคราห์และจำแนกภาพอาหารไทยยอดนิยมด้วยโครงข่ายประสาทเทียม</p>
+              <div class="slide-stack">
+                <span>Python</span><span>Html</span><span>Tailwind</span><span>CNN</span>
+              </div>
+              <div class="slide-buttons">
+                <a href="#" class="btn btn-primary btn-sm magnetic" data-gallery="foodscanner"><span>Visit project</span></a>
+               
+                 
+                    <path d="M4 8V6a2 2 0 0 1 2-2h2"/>
+                    <path d="M16 4h2a2 2 0 0 1 2 2v2"/>
+                    <path d="M20 16v2a2 2 0 0 1-2 2h-2"/>
+                    <path d="M8 20H6a2 2 0 0 1-2-2v-2"/>
+                    <!-- plate -->
+                    <circle cx="12" cy="12" r="4.5"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide" data-index="1">
+          <div class="slide-card">
+            <div class="slide-media">
+              <img src="{% static 'images/aroiho-1.png' %}" alt="Aroi Ho -รีวิวอาหาร Website" class="slide-img slide-img-photo">
+              <div class="slide-glass"></div>
+              <div class="spotlight"></div>
+            </div>
+            <div class="slide-content">
+              <span class="slide-number">02</span>
+              <p class="slide-category">Full-Stack · Product Design</p>
+              <h3 class="slide-title">Aroi Ho -รีวิวอาหาร<br>Website</h3>
+              <p class="slide-desc">แพลตฟอร์มเเนะนำร้านอาหารที่รวบรวมการจัดอันดับจากเมืองอุบล มีการอธิบายอาหารเเละที่อยู่  มีรนะบบที่สามารถคอมเม้นเพื่อรีวิวได้ อินเทอร์เฟซที่สะอาด ทันสมัย</p>
+              <div class="slide-stack">
+                <span>Html</span><span>Python</span><span>Tailwind</span><span>Sql</span>
+              </div>
+              <div class="slide-buttons">
+                <a href="#" class="btn btn-primary btn-sm magnetic" data-gallery="aroiho"><span>Visit project</span></a>
+                  <circle cx="12" cy="12" r="4.5"/>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide" data-index="2">
+          <div class="slide-card">
+            <div class="slide-media">
+              <img src="{% static 'images/Noodle.png' %}" alt="University & Activities" class="slide-img slide-img-photo">
+              <div class="slide-glass"></div>
+              <div class="spotlight"></div>
+            </div>
+            <div class="slide-content">
+              <span class="slide-number">03</span>
+              <p class="slide-category">Photography · Cinematography</p>
+              <h3 class="slide-title">Figma &amp;<br>UX/Ui</h3>
+              <p class="slide-desc">ออกเเบบหน้าการสั่งซื้อของร้านก๋วยเตี๋ยวด้วยFigma</p>
+              <div class="slide-stack">
+                <span>Figma</span><span>UX/UI</span>
+              </div>
+              <div class="slide-buttons">
+                <a href="#" class="btn btn-primary btn-sm magnetic" data-gallery="figma"><span>Watch</span></a>
+                <a href="https://www.figma.com/proto/Pu491wckJQufkXEWcnRx1w/Mobile?node-id=10-9&starting-point-node-id=10%3A9&t=6qIVLcEIs4f1nV5c-1" target="_blank" rel="noopener" class="btn btn-icon magnetic" aria-label="View on Instagram">
+                      <svg width="18" height="18" viewBox="0 0 54 80" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_912_3)">
+                            <path d="M13.3333 80.0002C20.6933 80.0002 26.6667 74.0268 26.6667 66.6668V53.3335H13.3333C5.97333 53.3335 0 59.3068 0 66.6668C0 74.0268 5.97333 80.0002 13.3333 80.0002Z" fill="#0ACF83"/>
+                            <path d="M0 39.9998C0 32.6398 5.97333 26.6665 13.3333 26.6665H26.6667V53.3332H13.3333C5.97333 53.3332 0 47.3598 0 39.9998Z" fill="#A259FF"/>
+                            <path d="M0 13.3333C0 5.97333 5.97333 0 13.3333 0H26.6667V26.6667H13.3333C5.97333 26.6667 0 20.6933 0 13.3333Z" fill="#F24E1E"/>
+                            <path d="M26.6667 0H40.0001C47.3601 0 53.3334 5.97333 53.3334 13.3333C53.3334 20.6933 47.3601 26.6667 40.0001 26.6667H26.6667V0Z" fill="#FF7262"/>
+                            <path d="M53.3334 39.9998C53.3334 47.3598 47.3601 53.3332 40.0001 53.3332C32.6401 53.3332 26.6667 47.3598 26.6667 39.9998C26.6667 32.6398 32.6401 26.6665 40.0001 26.6665C47.3601 26.6665 53.3334 32.6398 53.3334 39.9998Z" fill="#1ABCFE"/>
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_912_3">
+                                <rect width="53.3333" height="80" fill="white"/>
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="slider-controls">
+        <button class="slider-arrow" id="prevSlide" aria-label="Previous slide">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+
+        <div class="slider-index">
+          <span id="slideNow">01</span>
+          <div class="slider-progress"><div class="slider-progress-bar" id="progressBar"></div></div>
+          <span id="slideMax">03</span>
+        </div>
+
+        <button class="slider-arrow" id="nextSlide" aria-label="Next slide">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about" id="about">
+    <div class="about-grid">
+      <div class="about-visual reveal-up">
+        <div class="about-frame">
+          <img src="{% static 'images/Cooper.jpg' %}" alt="ธนชาติ คู่เรืองตระกูล" class="about-img">
+          <div class="about-frame-glow"></div>
+        </div>
+        <div class="about-badge">
+          <span class="badge-num">4+</span>
+          <span class="badge-label">ปีมหาลัย</span>
+        </div>
+      </div>
+      <div class="about-copy">
+        <p class="eyebrow reveal-up">About</p>
+        <h2 class="reveal-up">ธนชาติ คู่เรืองตระกูล</h2>
+        <p class="reveal-up">ผมเป็นนักศึกษาที่สนใจด้าน Frontend Development และ UI/UX Design มีความสุขกับการพัฒนาเว็บไซต์และสร้างประสบการณ์การใช้งานที่ดีให้กับผู้ใช้ พร้อมเรียนรู้เทคโนโลยีใหม่ ๆ และพัฒนาทักษะผ่านการลงมือทำโปรเจกต์จริงอยู่เสมอ โดยมีประสบการณ์ในการพัฒนาเว็บแอปพลิเคชัน การออกแบบอินเทอร์เฟซ และการสร้างผลงานที่ให้ความสำคัญทั้งด้านความสวยงามและการใช้งาน</p>
+        <div class="about-facts reveal-up">
+          <div class="fact"><span>Based in</span><strong>Ubon ratchathani, Thailand</strong></div>
+          <div class="fact"><span>Focus</span><strong>Web  ML · Web · Media</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="skills" id="skills">
+    <p class="eyebrow reveal-up">ทักษะและความสามารถ</p>
+    <h2 class="reveal-up">รวมทักษะและประสบการณ์</h2>
+
+    <div class="skills-grid">
+      <div class="skill-card reveal-up">
+        <div class="skill-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        </div>
+        <h3>AI &amp; Machine Learning</h3>
+        <ul>
+          <li>Computer vision &amp; image classification</li>
+          <li>Model training, deployment</li>
+          <li>Python, TensorFlow</li>
+          <li>Nutrition &amp; food-data pipelines</li>
+        </ul>
+      </div>
+
+      <div class="skill-card reveal-up">
+        <div class="skill-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg>
+        </div>
+        <h3>Product &amp; Web Development</h3>
+        <ul>
+          <li>Python, HTML, CSS</li>
+          <li>UI/UX Design &amp; User Experience</li>
+          <li>Design systems &amp; Tailwind CSS</li>
+          <li>Performance &amp; accessibility</li>
+        </ul>
+      </div>
+
+      <div class="skill-card reveal-up">
+        <div class="skill-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+        </div>
+        <h3>AI Applications</h3>
+        <ul>
+          <li>AI-powered applications</li>
+          <li>Generative AI &amp; AI-assisted tools</li>
+          <li>AI integration &amp; automation</li>
+          <li>Applying AI to real-world problems</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- ============ FEATURED PROJECTS ============ -->
+  
+<section class="projects" id="projects">
+    <p class="eyebrow reveal-up">Activity</p>
+    <h2 class="reveal-up">กิจกรรมต่างๆ</h2>
+
+    <div class="projects-grid">
+      <article class="project-card reveal-up">
+        <a class="project-cover">
+          <img src="{% static 'images/Activity2.jpg' %}" alt="บาสเก็ตบอล" class="project-cover-img">
+          <div class="project-glass"></div>
+          <div class="project-play-overlay"></div>
+        </a>
+        <div class="project-body">
+          <p class="project-cat">หมวดหมู่กิจกรรม/กีฬา</p>
+          <h3>กีฬาสีสาขาวิทยาศาสตร์</h3>
+          <p>เเชมป์บาสเก็ตบอลกีฬาสีของสาขาวิทยาศาสตร์</p>
+        </div>
+      </article>
+
+      <article class="project-card reveal-up">
+        <a href="https://youtu.be/NRhZuTPgGHU?si=0pqH7GojBy6Q9fcw" target="_blank" rel="noopener" class="project-cover">
+          <img src="{% static 'images/SciPlearn.png' %}" alt="SciPlearn UBU EP2" class="project-cover-img">
+          <div class="project-glass"></div>
+          <div class="project-play-overlay"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></span></div>
+        </a>
+        <div class="project-body">
+          <p class="project-cat">หมวดหมู่วีดีโอ</p>
+          <h3>SciPlearn UBU</h3>
+          <p>EP2 จุลินทรีย์ในอาหาร: ทำไมขนมปังถึงขึ้นรา?</p>
+          <a href="https://youtu.be/NRhZuTPgGHU?si=0pqH7GojBy6Q9fcw" target="_blank" rel="noopener" class="project-watch">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <span>ดูวิดีโอ</span>
+          </a>
+        </div>
+      </article>
+
+      <article class="project-card reveal-up">
+        <a href="https://youtu.be/Dpp405JJCzI?si=1bThGk5ymaC7YuXo" target="_blank" rel="noopener" class="project-cover">
+          <img src="{% static 'images/qqqqq.png' %}" alt="EP3 ยีสต์กับการหมัก" class="project-cover-img">
+          <div class="project-glass"></div>
+          <div class="project-play-overlay"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></span></div>
+        </a>
+        <div class="project-body">
+          <p class="project-cat">หมวดหมู่วีดีโอ</p>
+          <h3>SciPlearn UBU</h3>
+          <p>EP3 ยีสต์กับการหมัก: เบื้องหลังขนมปัง โยเกิร์ต และน้ำหมัก</p>
+          <a href="https://youtu.be/Dpp405JJCzI?si=1bThGk5ymaC7YuXo" target="_blank" rel="noopener" class="project-watch">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <span>ดูวิดีโอ</span>
+          </a>
+        </div>
+      </article>
+
+      <article class="project-card reveal-up">
+        <a class="project-cover">
+          <img src="{% static 'images/Activity1.jpg' %}" alt="IT Night" class="project-cover-img">
+          <div class="project-glass"></div>
+          <div class="project-play-overlay"><path d="M8 5v14l11-7z"/></div>
+        </a>
+        <div class="project-body">
+          <p class="project-cat">หมวดหมู่กิจกรรม</p>
+          <h3>IT Night</h3>
+          <p>กิจกรรมการเเสดงงานเลี้ยงของสาขา</p>
+
+        </div>
+      </article>
+
+      <article class="project-card reveal-up">
+        <a href="https://youtu.be/2zuwcoYDzdk?si=Vh4uJT0_LLW_RRJh" target="_blank" rel="noopener" class="project-cover">
+          <img src="{% static 'images/Activity3.jpg' %}" alt="Just say NO บุหรี่ไฟฟ้า" class="project-cover-img">
+          <div class="project-glass"></div>
+          <div class="project-play-overlay"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></span></div>
+        </a>
+        <div class="project-body">
+          <p class="project-cat">หมวดหมู่วีดีโอ</p>
+          <h3>Just say "NO" บุหรี่ไฟฟ้า</h3>
+          <p>ทำวีดีโอต่อต้านบุหรี่ไฟฟ้า</p>
+          <a href="https://youtu.be/2zuwcoYDzdk?si=Vh4uJT0_LLW_RRJh" target="_blank" rel="noopener" class="project-watch">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <span>ดูวิดีโอ</span>
+          </a>
+        </div>
+      </article>
+
+      <article class="project-card reveal-up">
+        <a href="https://www.facebook.com/share/v/1FYGZQN7rs/" target="_blank" rel="noopener" class="project-cover">
+          <img src="{% static 'images/ICTContent.png' %}" alt="วันวิทยาศาสตร์ - บรรยากาศ" class="project-cover-img">
+          <div class="project-glass"></div>
+          <div class="project-play-overlay"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></span></div>
+        </a>
+        <div class="project-body">
+          <p class="project-cat">หมวดหมู่วีดีโอ</p>
+          <h3>วันวิทยาศาสตร์</h3>
+          <p>ถ่ายวิดีโอเก็บบรรยากาศและสัมภาษณ์คนเข้าร่วมกิจกรรม</p>
+          <a href="hhttps://www.facebook.com/share/v/1FYGZQN7rs/" target="_blank" rel="noopener" class="project-watch">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <span>ดูวิดีโอ</span>
+          </a>
+        </div>
+      </article>
+
+      <article class="project-card reveal-up">
+        <a class="project-cover">
+          <img src="{% static 'images/Activity5.jpg' %}" alt="วันวิทยาศาสตร์ - บูธกิจกรรม" class="project-cover-img">
+          <div class="project-glass"></div>
+          <div class="project-play-overlay"></div>
+        </a>
+        <div class="project-body">
+          <p class="project-cat">หมวดหมู่กิจกรรม</p>
+          <h3>วันวิทยาศาสตร์</h3>
+          <p>จัดซุ่มกิจกรรมวันวิทย์ของมหาลัยอุบลราชธานี</p>
+        </div>
+      </article>
+
+      <article class="project-card reveal-up">
+        <a href="https://www.youtube.com/watch?v=qkwOpjyFpnQ" target="_blank" rel="noopener" class="project-cover">
+          <img src="{% static 'images/wwwww.png' %}" alt="วันวิทยาศาสตร์ - อีกช่วง" class="project-cover-img">
+          <div class="project-glass"></div>
+          <div class="project-play-overlay"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></span></div>
+        </a>
+        <div class="project-body">
+          <p class="project-cat">หมวดหมู่วีดีโอ</p>
+          <h3>BMC</h3>
+          <p>งานถ่ายทำเกี่ยวกับ BMC</p>
+          <a href="https://www.youtube.com/watch?v=qkwOpjyFpnQ" target="_blank" rel="noopener" class="project-watch">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <span>ดูวิดีโอ</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+
+   <!-- ============ EXPERIENCE TIMELINE ============ -->
+  <section class="experience" id="experience">
+    <p class="eyebrow reveal-up">ประสบการณ์</p>
+    <h2 class="reveal-up">ประสบการณ์ทำงาน</h2>
+
+    <div class="timeline">
+      <div class="timeline-line"><div class="timeline-line-fill" id="timelineFill"></div></div>
+
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot"></div>
+        <span class="timeline-year">2026</span>
+        <h3>ระบบวิเคราะห์และจำแนกภาพอาหารไทยยอดนิยมด้วยโครงข่ายประสาทเทียมแบบคอนโวลูชัน</h3>
+        <p>พัฒนาระบบจำแนกภาพอาหารไทยด้วยเทคนิค Deep Learning โดยใช้ Convolutional Neural Network (CNN)</p>
+      </div>
+
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot"></div>
+        <span class="timeline-year">2025</span>
+        <h3>Animal Classification AI System</h3>
+        <p>สร้าง AI ที่ให้ผู้ใช้คิดถึงสัตว์สักตัว แล้วระบบจะถามคำถาม Yes/No ทีละข้อเพื่อค่อยๆ ตีกรอบจนเดาได้ถูก โดยใช้ Random Forest เป็นตัวขับเคลื่อนการตัดสินใจ</p>
+      </div>
+
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot"></div>
+        <span class="timeline-year">2025</span>
+        <h3>Aroi Ho - รีวิวอาหาร Website</h3>
+        <p>แพลตฟอร์มแนะนำร้านอาหารที่รวบรวมการจัดอันดับจากเมืองอุบล มีการอธิบายอาหารและที่อยู่ มีระบบที่สามารถคอมเม้นเพื่อรีวิวได้ อินเทอร์เฟซที่สะอาด ทันสมัย</p>
+      </div>
+
+      <div class="timeline-item reveal-up">
+        <div class="timeline-dot"></div>
+        <span class="timeline-year">Earlier</span>
+        <h3>เริ่มต้นเรียนรู้ด้านเทคโนโลยี</h3>
+        <p>เริ่มเรียนรู้การเขียนโปรแกรมจากภาษา Python และค่อย ๆ ต่อยอดทักษะผ่านการศึกษาในมหาวิทยาลัย การทำโปรเจกต์ และการเรียนรู้ด้วยตนเอง</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- ============ CONTACT ============ -->
+<!-- ============ CONTACT ============ -->
+  <section class="contact" id="contact">
+    <div class="contact-inner reveal-up">
+      <p class="contact-eyebrow">CONTACT</p>
+      <h2 class="contact-title">ขอบคุณที่เยี่ยมชมครับ!</h2>
+      <p class="contact-sub">หากสนใจผลงานของผม หรือต้องการสอบถามข้อมูลเพิ่มเติม สามารถทักมาพูดคุยผ่านอีเมลหรือช่องทางด้านล่างได้เลยครับ</p>
+      
+      <!-- Email Button (CTA หลัก) -->
+      <a href="mailto:Thanachart2005@gmail.com" class="contact-email-btn magnetic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        <span>Thanachart2005@gmail.com</span>
+      </a>
+
+      <!-- Social Links (ช่องทางรอง) -->
+      <div class="contact-socials">
+        <a href="https://www.facebook.com/copter.thanachart" target="_blank" rel="noopener" class="contact-social-link">Facebook</a>
+        <a href="https://canva.link/8r9e3taynggej42" target="_blank" rel="noopener" class="contact-social-link">Resume</a>
+        <a href="https://www.instagram.com/thana._.cp/" target="_blank" rel="noopener" class="contact-social-link">Instagram</a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <span>© 2026 — Thanachart Khuruangtrakul</span>
+      <a href="#top">Back to top ↑</a>
+    </footer>
+  </section>
+
+</main>
+
+<!-- ============ PROJECT GALLERY MODAL ============ -->
+<div class="project-modal-overlay" id="projectModalOverlay">
+  <div class="project-modal">
+    <div class="project-modal-head">
+      <h3 id="projectModalTitle">Project</h3>
+      <button class="project-modal-close" id="projectModalClose" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="project-modal-main">
+      <img id="projectModalImg" src="" alt="">
+      <button class="project-modal-nav prev" id="projectModalPrev" aria-label="Previous image">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="project-modal-nav next" id="projectModalNext" aria-label="Next image">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+    <div class="project-modal-desc" id="projectModalDesc"></div>
+    <div class="project-modal-desc" id="projectModalDesc"></div>
+    <div class="project-modal-thumbs" id="projectModalThumbs"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ==========================================================
+   SETUP
+========================================================== */
+const isTouch = window.matchMedia('(hover: none)').matches;
+const isMobile = window.innerWidth < 900;
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ==========================================================
+   LOADER
+========================================================== */
+const loader = document.getElementById('loader');
+const loaderPct = document.getElementById('loaderPct');
+let pct = 0;
+const loaderInterval = setInterval(() => {
+  pct += Math.floor(Math.random() * 18) + 6;
+  if (pct >= 100) {
+    pct = 100;
+    loaderPct.textContent = pct;
+    clearInterval(loaderInterval);
+    setTimeout(() => {
+      loader.classList.add('done');
+      document.body.style.overflow = '';
+      initWordReveal();
+    }, 300);
+  } else {
+    loaderPct.textContent = pct;
+  }
+}, 120);
+document.body.style.overflow = 'hidden';
+setTimeout(() => { document.body.style.overflow = ''; }, 2000);
+
+/* ==========================================================
+   CUSTOM CURSOR
+========================================================== */
+const cursorGlow = document.getElementById('cursorGlow');
+const cursorDot = document.getElementById('cursorDot');
+let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+
+if (!isTouch) {
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursorDot.style.left = mouseX + 'px';
+    cursorDot.style.top = mouseY + 'px';
+  });
+
+  function animateGlow() {
+    glowX += (mouseX - glowX) * 0.12;
+    glowY += (mouseY - glowY) * 0.12;
+    cursorGlow.style.left = glowX + 'px';
+    cursorGlow.style.top = glowY + 'px';
+    requestAnimationFrame(animateGlow);
+  }
+  animateGlow();
+
+  document.querySelectorAll('a, button, .slide-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursorDot.classList.add('big'));
+    el.addEventListener('mouseleave', () => cursorDot.classList.remove('big'));
+  });
+} else {
+  cursorGlow.style.display = 'none';
+  cursorDot.style.display = 'none';
+}
+
+/* ==========================================================
+   NAV
+========================================================== */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+const navBurger = document.getElementById('navBurger');
+const mobileMenu = document.getElementById('mobileMenu');
+navBurger.addEventListener('click', () => {
+  navBurger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    navBurger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+/* ==========================================================
+   MAGNETIC BUTTONS
+========================================================== */
+if (!isTouch && !prefersReduced) {
+  document.querySelectorAll('.magnetic').forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      el.style.transform = `translate(${x * 0.28}px, ${y * 0.35}px)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = 'translate(0,0)'; });
+  });
+}
+
+/* ==========================================================
+   SCROLL REVEAL (IntersectionObserver)
+========================================================== */
+const revealTargets = document.querySelectorAll('.reveal-up, .reveal-fade');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+revealTargets.forEach(el => revealObserver.observe(el));
+
+/* Word-by-word hero title reveal, staggered */
+function initWordReveal() {
+  const words = document.querySelectorAll('.reveal-word');
+  words.forEach((w, i) => {
+    setTimeout(() => w.classList.add('in-view'), 120 * i);
+  });
+  document.querySelectorAll('.reveal-line').forEach((l, i) => {
+    setTimeout(() => l.classList.add('in-view'), 100 + 80 * i);
+  });
+}
+
+/* ==========================================================
+   TIMELINE PROGRESS FILL
+========================================================== */
+const timelineFill = document.getElementById('timelineFill');
+const timelineEl = document.querySelector('.timeline');
+if (timelineFill && timelineEl) {
+  window.addEventListener('scroll', () => {
+    const rect = timelineEl.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const total = rect.height;
+    const visible = Math.min(Math.max(vh * 0.8 - rect.top, 0), total);
+    const ratio = total > 0 ? (visible / total) * 100 : 0;
+    timelineFill.style.height = Math.min(ratio, 100) + '%';
+  }, { passive: true });
+}
+
+/* ==========================================================
+   3D PERSPECTIVE SLIDER
+========================================================== */
+(function slider() {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let current = 0;
+  let autoTimer;
+
+  const prevBtn = document.getElementById('prevSlide');
+  const nextBtn = document.getElementById('nextSlide');
+  const slideNow = document.getElementById('slideNow');
+  const slideMax = document.getElementById('slideMax');
+  const progressBar = document.getElementById('progressBar');
+  const stage = document.getElementById('sliderStage');
+
+  slideMax.textContent = String(total).padStart(2, '0');
+
+  function render() {
+    slides.forEach((slide, i) => {
+      slide.classList.remove('active', 'prev', 'next-hidden');
+      if (i === current) slide.classList.add('active');
+      else if (i === (current - 1 + total) % total) slide.classList.add('prev');
+      else if (i === (current + 1) % total) slide.classList.add('next-hidden');
+    });
+    slideNow.textContent = String(current + 1).padStart(2, '0');
+    progressBar.style.width = ((current + 1) / total) * 100 + '%';
+  }
+
+  function goTo(index) {
+    current = (index + total) % total;
+    render();
+    resetAuto();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function resetAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(next, 6500);
+  }
+
+  nextBtn.addEventListener('click', next);
+  prevBtn.addEventListener('click', prev);
+
+  // Keyboard navigation
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  stage.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
+  }, { passive: true });
+
+  // Mouse wheel navigation (horizontal-ish intent while hovering the slider)
+  let wheelLock = false;
+  stage.addEventListener('wheel', (e) => {
+    if (wheelLock) return;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 20) {
+      e.preventDefault();
+      wheelLock = true;
+      e.deltaX > 0 ? next() : prev();
+      setTimeout(() => { wheelLock = false; }, 700);
+    }
+  }, { passive: false });
+
+  // Mouse tilt + spotlight per active card (desktop only, respects reduced motion)
+  if (!isTouch && !isMobile && !prefersReduced) {
+    slides.forEach(slide => {
+      const card = slide.querySelector('.slide-card');
+      const spot = slide.querySelector('.spotlight');
+      slide.addEventListener('mousemove', (e) => {
+        if (!slide.classList.contains('active')) return;
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        const rotY = (px - 0.5) * 14;
+        const rotX = (0.5 - py) * 10;
+        card.style.transform = `rotateY(${rotY}deg) rotateX(${rotX}deg) scale(1.01)`;
+        spot.style.setProperty('--sx', (px * 100) + '%');
+        spot.style.setProperty('--sy', (py * 100) + '%');
+      });
+      slide.addEventListener('mouseleave', () => {
+        card.style.transform = 'rotateY(0deg) rotateX(0deg) scale(1)';
+      });
+    });
+  }
+
+  render();
+  resetAuto();
+})();
+
+/* ==========================================================
+   HERO PARALLAX BLOBS (subtle, desktop only)
+========================================================== */
+if (!isTouch && !isMobile && !prefersReduced) {
+  const blobs = document.querySelectorAll('.aurora-blob');
+  window.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5);
+    const y = (e.clientY / window.innerHeight - 0.5);
+    blobs.forEach((b, i) => {
+      const depth = (i + 1) * 10;
+      b.style.marginLeft = `${x * depth}px`;
+      b.style.marginTop = `${y * depth}px`;
+    });
+  });
+}
+
+/* PROJECT GALLERY MODAL */
+/* PROJECT GALLERY MODAL */
+(function projectModal(){
+  const galleries = {
+    aroiho: {
+      title: "Aroi Ho - รีวิวอาหาร Website",
+      images: [
+        "{% static 'images/aroiho-1.png' %}",
+        "{% static 'images/aroiho-2.png' %}",
+        "{% static 'images/aroiho-3.png' %}",
+        "{% static 'images/aroiho-4.png' %}",
+        "{% static 'images/aroiho-5.png' %}",
+        "{% static 'images/aroiho-6.png' %}",
+        "{% static 'images/aroiho-7.png' %}",
+        "{% static 'images/aroiho-8.png' %}",
+        "{% static 'images/aroiho-9.png' %}",
+        "{% static 'images/aroiho-10.png' %}",
+        "{% static 'images/aroiho-11.png' %}",
+        "{% static 'images/aroiho-12.png' %}"
+      ]
+    }, // ← ต้องมี comma ตรงนี้
+
+    foodscanner: {
+      title: "Food Scanner Web",
+      images: [
+        "{% static 'images/Scan2.png' %}",
+        "{% static 'images/Scan3.png' %}",
+        "{% static 'images/Scan4.png' %}"
+      ]
+    },
+
+figma: {
+      title: "Figma & UX/UI — หน้าสั่งซื้อร้านก๋วยเตี๋ยว",
+      images: [
+        "{% static 'images/Noodle1.png' %}",
+        "{% static 'images/Noodle2.png' %}",
+        "{% static 'images/Noodle3.png' %}"
+      ],
+      summary: "ออกแบบหน้าสั่งซื้อออนไลน์ของร้านก๋วยเตี๋ยว ตั้งแต่ค้นคว้าปัญหาจริงของร้าน ไปจนถึงทำ Prototype ที่กดทดลองสั่งอาหารได้จริงใน Figma",
+      steps: [
+        "Wireframe: ร่างโครงหน้าจอคร่าวๆ วางลำดับขั้นตอนการสั่งซื้อ",
+        "UI Design: ออกแบบหน้าตาจริงใน Figma ให้ตรงกับธีมร้าน",
+        "Prototype: เชื่อมปุ่มกดให้ทดลองสั่งอาหารได้เหมือนแอปจริง"
+      ],
+      links: [
+        { url: "https://www.figma.com/design/FZEcaDSbzGA0RcYteaRj3B/%E0%B8%81%E0%B9%8B%E0%B8%A7%E0%B8%A2%E0%B9%80%E0%B8%95%E0%B8%B5%E0%B9%8B%E0%B8%A2%E0%B8%A7%E0%B8%9F%E0%B8%B2%E0%B8%AA?node-id=0-1&t=kOurPzdodrunXTpu-1", label: "ขั้นตอนที่ 1: Wireframe" },
+        { url: "https://www.figma.com/design/5RLyyiKxUWUKH9IBOrOXr0/%E0%B8%81%E0%B9%8B%E0%B8%A7%E0%B8%A2%E0%B9%80%E0%B8%95%E0%B8%B5%E0%B9%8B%E0%B8%A2%E0%B8%A7%E0%B8%9F%E0%B8%B2%E0%B8%AA%E0%B8%95%E0%B8%B9%E0%B9%89?node-id=0-1&t=s1ceZzciyQ0WRAD9-1",   label: "ขั้นตอนที่ 2: UI Design" },
+        { url: "https://www.figma.com/proto/Pu491wckJQufkXEWcnRx1w/Mobile?node-id=10-9&starting-point-node-id=10%3A9&t=sFNVKCwnKb9IGxJH-1",  label: "ขั้นตอนที่ 3: Prototype" }
+      ]
+    }
+  };
+
+  const overlay = document.getElementById('projectModalOverlay');
+  const imgEl = document.getElementById('projectModalImg');
+  const titleEl = document.getElementById('projectModalTitle');
+  const thumbsEl = document.getElementById('projectModalThumbs');
+  const closeBtn = document.getElementById('projectModalClose');
+  const prevBtn = document.getElementById('projectModalPrev');
+  const nextBtn = document.getElementById('projectModalNext');
+
+  let currentImages = [];
+  let currentIndex = 0;
+
+  function renderThumbs(){
+    thumbsEl.innerHTML = '';
+    currentImages.forEach((src, i) => {
+      const t = document.createElement('img');
+      t.src = src;
+      if (i === currentIndex) t.classList.add('active');
+      t.addEventListener('click', () => { currentIndex = i; update(); });
+      thumbsEl.appendChild(t);
+    });
+  }
+  function update(){
+    imgEl.src = currentImages[currentIndex];
+    Array.from(thumbsEl.children).forEach((t, i) => t.classList.toggle('active', i === currentIndex));
+  }
+  function openModal(key){
+    const gallery = galleries[key];
+    if (!gallery) return;
+    titleEl.textContent = gallery.title;
+    currentImages = gallery.images;
+    currentIndex = 0;
+
+    const descEl = document.getElementById('projectModalDesc');
+    let html = '';
+    if (gallery.summary) html += `<p class="desc-summary">${gallery.summary}</p>`;
+    if (gallery.steps && gallery.steps.length) {
+      html += '<ol>' + gallery.steps.map(s => `<li>${s}</li>`).join('') + '</ol>';
+    }
+    if (gallery.links && gallery.links.length) {
+      html += '<div class="project-modal-links">';
+      html += gallery.links.map(l =>
+        `<a href="${l.url}" target="_blank" rel="noopener" class="project-modal-link"><span>${l.label}</span></a>`
+      ).join('');
+      html += '</div>';
+    }
+    descEl.innerHTML = html;
+
+    renderThumbs();
+    update();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-gallery]').forEach(btn => {
+    btn.addEventListener('click', (e) => { e.preventDefault(); openModal(btn.getAttribute('data-gallery')); });
+  });
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length; update(); });
+  nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % currentImages.length; update(); });
+  window.addEventListener('keydown', (e) => {
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'ArrowLeft') { currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length; update(); }
+    if (e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % currentImages.length; update(); }
+  });
+})();
+
+</script>
+</body>
+</html>

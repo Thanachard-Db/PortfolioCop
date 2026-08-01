@@ -1012,16 +1012,16 @@ h2{ font-size: clamp(30px, 4vw, 46px); max-width: 620px; margin-bottom: 20px; }
       </article>
 
       <article class="project-card reveal-up">
-        <a href="https://www.youtube.com/watch?v=qkwOpjyFpnQ" target="_blank" rel="noopener" class="project-cover">
-          <img src="{% static 'images/Sp1.png' %}" alt="Sprit - อีกช่วง" class="project-cover-img">
+        <a href="#" class="project-cover" data-gallery="animalclassification">
+          <img src="{% static 'images/Sp1.png' %}" alt="Animal Classification AI System" class="project-cover-img">
           <div class="project-glass"></div>
           <div class="project-play-overlay"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></span></div>
         </a>
         <div class="project-body">
           <p class="project-cat">หมวดหมู่โปรเจค</p>
           <h3>Animal Classification AI System</h3>
-          <p>การทำโปรเจกต์</p> 
-          
+          <p>ระบบ AI ทายสัตว์จากคำถาม Yes/No โดยใช้ Random Forest</p>
+          <a href="#" class="project-watch" data-gallery="animalclassification">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             <span>ดูโปรเจค</span>
           </a>
@@ -1415,6 +1415,22 @@ if (!isTouch && !isMobile && !prefersReduced) {
         "{% static 'images/Scan4.png' %}"
       ]
     },
+
+    animalclassification: {
+    title: "Animal Classification AI System",
+    summary: "ระบบ AI ที่ให้ผู้ใช้คิดถึงสัตว์สักตัว แล้วระบบจะถามคำถาม Yes/No ทีละข้อเพื่อค่อยๆ ตีกรอบจนเดาได้ถูก โดยใช้ Random Forest เป็นตัวขับเคลื่อนการตัดสินใจ ความแม่นยำกว่า 90%",
+    images: [
+      "{% static 'images/Sp1.png' %}",
+      "{% static 'images/Sp2.png' %}",
+      "{% static 'images/Sp3.png' %}",
+      "{% static 'images/Sp4.png' %}",
+      "{% static 'images/Sp5.png' %}",
+      "{% static 'images/Sp6.png' %}",
+      "{% static 'images/Sp7.png' %}",
+      "{% static 'images/Sp8.png' %}",
+
+    ]
+  },
 
 figma: {
       title: "Figma & UX/UI — หน้าสั่งซื้อร้านก๋วยเตี๋ยว",

@@ -266,6 +266,8 @@ h2{ font-size: clamp(30px, 4vw, 46px); max-width: 620px; margin-bottom: 20px; }
   transform-style: preserve-3d; will-change: transform;
   position: relative;
 }
+.slide-card[data-gallery-card]{ cursor: pointer; }
+
 .slide-card::before{
   content:''; position:absolute; inset:0; padding:1px; border-radius:26px;
   background: linear-gradient(135deg, rgba(124,92,255,0.5), rgba(0,212,255,0) 40%);
@@ -690,7 +692,7 @@ h2{ font-size: clamp(30px, 4vw, 46px); max-width: 620px; margin-bottom: 20px; }
       <div class="slider-stage" id="sliderStage">
 
         <article class="slide" data-index="0">
-          <div class="slide-card">
+          <div class="slide-card" data-gallery-card="foodscanner">
             <div class="slide-media">
               <img src="{% static 'images/Scan1.png' %}" alt="Aroi Ho -รีวิวอาหาร Website" class="slide-img slide-img-photo">
 
@@ -723,7 +725,7 @@ h2{ font-size: clamp(30px, 4vw, 46px); max-width: 620px; margin-bottom: 20px; }
         </article>
 
         <article class="slide" data-index="1">
-          <div class="slide-card">
+          <div class="slide-card" data-gallery-card="aroiho">
             <div class="slide-media">
               <img src="{% static 'images/aroiho-1.png' %}" alt="Aroi Ho -รีวิวอาหาร Website" class="slide-img slide-img-photo">
               <div class="slide-glass"></div>
@@ -747,7 +749,7 @@ h2{ font-size: clamp(30px, 4vw, 46px); max-width: 620px; margin-bottom: 20px; }
         </article>
 
         <article class="slide" data-index="2">
-          <div class="slide-card">
+          <div class="slide-card" data-gallery-card="figma">
             <div class="slide-media">
               <img src="{% static 'images/Noodle.png' %}" alt="University & Activities" class="slide-img slide-img-photo">
               <div class="slide-glass"></div>
@@ -822,7 +824,7 @@ h2{ font-size: clamp(30px, 4vw, 46px); max-width: 620px; margin-bottom: 20px; }
         <p class="reveal-up">ผมเป็นนักศึกษาที่สนใจด้าน Frontend Development และ UI/UX Design มีความสุขกับการพัฒนาเว็บไซต์และสร้างประสบการณ์การใช้งานที่ดีให้กับผู้ใช้ พร้อมเรียนรู้เทคโนโลยีใหม่ ๆ และพัฒนาทักษะผ่านการลงมือทำโปรเจกต์จริงอยู่เสมอ โดยมีประสบการณ์ในการพัฒนาเว็บแอปพลิเคชัน การออกแบบอินเทอร์เฟซ และการสร้างผลงานที่ให้ความสำคัญทั้งด้านความสวยงามและการใช้งาน</p>
         <div class="about-facts reveal-up">
           <div class="fact"><span>Based in</span><strong>Ubon ratchathani, Thailand</strong></div>
-          <div class="fact"><span>Focus</span><strong>Web  ML · Web · Media</strong></div>
+          <div class="fact"><span>Focus</span><strong> ML · Web · Media</strong></div>
         </div>
       </div>
     </div>
@@ -1018,12 +1020,12 @@ h2{ font-size: clamp(30px, 4vw, 46px); max-width: 620px; margin-bottom: 20px; }
           <div class="project-play-overlay"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></span></div>
         </a>
         <div class="project-body">
-          <p class="project-cat">หมวดหมู่โปรเจค</p>
+          <p class="project-cat">หมวดหมู่เว็บ</p>
           <h3>Animal Classification AI System</h3>
           <p>ระบบ AI ทายสัตว์จากคำถาม Yes/No โดยใช้ Random Forest</p>
           <a href="#" class="project-watch" data-gallery="animalclassification">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            <span>ดูโปรเจค</span>
+            <span>ดูเว็บ</span>
           </a>
         </div>
       </article>
@@ -1418,7 +1420,7 @@ if (!isTouch && !isMobile && !prefersReduced) {
 
     animalclassification: {
     title: "Animal Classification AI System",
-    summary: "ระบบ AI ที่ให้ผู้ใช้คิดถึงสัตว์สักตัว แล้วระบบจะถามคำถาม Yes/No ทีละข้อเพื่อค่อยๆ ตีกรอบจนเดาได้ถูก โดยใช้ Random Forest เป็นตัวขับเคลื่อนการตัดสินใจ ความแม่นยำกว่า 90%",
+    summary: "ระบบ AI ที่ให้ผู้ใช้คิดถึงสัตว์สักตัว แล้วระบบจะถามคำถาม Yes/No ทีละข้อเพื่อค่อยๆ ตีกรอบจนเดาได้ถูก โดยใช้ Random Forest เป็นตัวขับเคลื่อนการตัดสินใจ ",
     images: [
       "{% static 'images/Sp1.png' %}",
       "{% static 'images/Sp2.png' %}",
@@ -1452,6 +1454,20 @@ figma: {
       ]
     }
   };
+
+  /* Whole-card click opens the gallery (except real external links) */
+document.querySelectorAll('.slide-card[data-gallery-card]').forEach(card => {
+  card.addEventListener('click', (e) => {
+    const realLink = e.target.closest('a:not([data-gallery])');
+    if (realLink && realLink.getAttribute('href') && realLink.getAttribute('href') !== '#') {
+      return; // ปล่อยให้ลิงก์จริง (เช่น Figma) เปิดออกไปตามปกติ
+    }
+    e.preventDefault();
+    const key = card.getAttribute('data-gallery-card');
+    document.querySelector(`[data-gallery="${key}"]`)?.click();
+  });
+});
+
 
   const overlay = document.getElementById('projectModalOverlay');
   const imgEl = document.getElementById('projectModalImg');
